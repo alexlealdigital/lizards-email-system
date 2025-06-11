@@ -12,7 +12,8 @@ app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'sta
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 
 # CORS configurado corretamente para API
-CORS(app, resources={r"/api/*": {"origins": "*"}}, methods=["GET", "POST", "OPTIONS"])
+CORS(app)  # Mantém isso global
+CORS(email_bp, resources={r"/send-email": {"origins": "*"}})
 
 # Registrando blueprints da API
 app.register_blueprint(user_bp, url_prefix='/api')
