@@ -1,149 +1,74 @@
-# Sistema de Envio de Emails - Lizards Games
+# 🦎 Lizards Games - Backend Email Service
 
-## Descrição
-Solução Python Flask para envio de emails através do formulário de contato do site da Lizards Games. O sistema substitui o formulário Netlify original por um backend Python que utiliza SMTP do Zoho Mail para enviar emails para gameslizards@gmail.com.
+Sistema de envio de emails para o formulário de contato do site da Lizards Games.
 
-## Características
-- ✅ Backend Flask com CORS configurado
-- ✅ Envio de emails via SMTP Zoho Mail
-- ✅ Formulário HTML responsivo mantido intacto
-- ✅ Validação de dados do formulário
-- ✅ Feedback visual para o usuário
-- ✅ Tratamento de erros
+## 🚀 Deploy no Render.com
 
-## Estrutura do Projeto
+### **Configurações:**
+- **Build Command:** `./build.sh`
+- **Start Command:** `gunicorn --bind 0.0.0.0:$PORT main:app`
+
+### **Variáveis de Ambiente:**
 ```
-lizards-email-system/
-├── email-backend/
-│   ├── src/
-│   │   ├── main.py              # Aplicação principal Flask
-│   │   ├── routes/
-│   │   │   ├── email.py         # Rota para envio de emails
-│   │   │   └── user.py          # Rotas de usuário (padrão)
-│   │   ├── static/
-│   │   │   └── index.html       # Site da Lizards Games modificado
-│   │   └── models/              # Modelos de banco (não utilizados)
-│   ├── venv/                    # Ambiente virtual Python
-│   └── requirements.txt         # Dependências Python
-├── index.html                   # Arquivo HTML original
-├── mail.txt                     # Configurações de email
-└── README.md                    # Esta documentação
+EMAIL_SENDER=lab.leal.jornal@zohomail.com
+EMAIL_PASSWORD=Chat2025$
+EMAIL_RECIPIENT=gameslizards@gmail.com
 ```
 
-## Configurações de Email
-- **Servidor SMTP:** smtp.zoho.com
-- **Porta:** 587
-- **Email Remetente:** lab.leal.jornal@zohomail.com
-- **Email Destinatário:** gameslizards@gmail.com
-- **Senha:** Chat2025$
+## 📁 Estrutura do Projeto
 
-## Como Executar Localmente
+```
+├── src/
+│   ├── main.py              # Aplicação Flask principal
+│   └── routes/
+│       └── email.py         # Rota de envio de emails
+├── main.py                  # Entry point para Render
+├── requirements.txt         # Dependências Python
+├── build.sh                 # Script de build
+└── .gitignore              # Arquivos a ignorar
+```
 
-### 1. Navegar para o diretório do backend
+## 🔧 Endpoints
+
+### **GET /**
+Retorna status do serviço
+```json
+{
+  "message": "Lizards Games Email Service",
+  "status": "running",
+  "version": "1.0"
+}
+```
+
+### **POST /api/send-email**
+Envia email do formulário de contato
+```json
+{
+  "name": "Nome do usuário",
+  "email": "email@exemplo.com",
+  "subject": "Assunto (opcional)",
+  "message": "Mensagem do usuário"
+}
+```
+
+## ✅ Teste Local
+
 ```bash
-cd email-backend
-```
-
-### 2. Ativar o ambiente virtual
-```bash
-source venv/bin/activate
-```
-
-### 3. Instalar dependências (se necessário)
-```bash
+# Instalar dependências
 pip install -r requirements.txt
+
+# Executar
+python main.py
 ```
 
-### 4. Executar a aplicação
-```bash
-python src/main.py
-```
+Acesse: http://localhost:5000
 
-### 5. Acessar no navegador
-```
-http://localhost:5000
-```
+## 🌐 Produção
 
-## API Endpoints
-
-### POST /api/send-email
-Endpoint para envio de emails através do formulário.
-
-**Parâmetros (JSON):**
-- `name` (string, obrigatório): Nome do remetente
-- `email` (string, obrigatório): Email do remetente
-- `subject` (string, opcional): Assunto da mensagem
-- `message` (string, obrigatório): Conteúdo da mensagem
-
-**Resposta de Sucesso:**
-```json
-{
-    "success": true,
-    "message": "Email enviado com sucesso!"
-}
-```
-
-**Resposta de Erro:**
-```json
-{
-    "success": false,
-    "message": "Mensagem de erro"
-}
-```
-
-## Modificações Realizadas
-
-### 1. Formulário HTML
-- Removido atributo `netlify` do formulário original
-- Adicionado ID `contact-form` para JavaScript
-- Implementado JavaScript para envio via AJAX
-- Adicionado feedback visual com mensagens de sucesso/erro
-
-### 2. Backend Flask
-- Criada rota `/api/send-email` para processar formulário
-- Configurado CORS para permitir requisições do frontend
-- Implementada validação de dados obrigatórios
-- Configurado envio de email via SMTP
-
-### 3. Segurança
-- Validação de dados de entrada
-- Tratamento de erros SMTP
-- Headers CORS configurados adequadamente
-
-## Deploy em Produção
-
-### Opção 1: Render.com (Recomendado)
-1. Fazer upload do diretório `email-backend` para um repositório Git
-2. Conectar o repositório ao Render.com
-3. Configurar as variáveis de ambiente:
-   - `EMAIL_SENDER=lab.leal.jornal@zohomail.com`
-   - `EMAIL_PASSWORD=Chat2025$`
-   - `EMAIL_RECIPIENT=gameslizards@gmail.com`
-
-### Opção 2: Heroku
-1. Instalar Heroku CLI
-2. Fazer login: `heroku login`
-3. Criar app: `heroku create lizards-email-system`
-4. Configurar variáveis: `heroku config:set EMAIL_SENDER=...`
-5. Deploy: `git push heroku main`
-
-### Opção 3: VPS/Servidor Próprio
-1. Instalar Python 3.11+
-2. Copiar arquivos do projeto
-3. Instalar dependências: `pip install -r requirements.txt`
-4. Configurar servidor web (nginx + gunicorn)
-5. Configurar SSL/HTTPS
-
-## Teste da Solução
-✅ **Formulário testado com sucesso!**
-- Preenchimento de todos os campos funcionando
-- Envio de email realizado com sucesso
-- Feedback visual funcionando corretamente
-- Responsividade mantida em dispositivos móveis
-
-## Suporte
-Para dúvidas ou problemas, entre em contato com a equipe de desenvolvimento.
+- **URL:** https://lizards-mail-service.onrender.com
+- **Frontend:** https://lzgamestech.netlify.app
+- **CORS:** Configurado apenas para o domínio do Netlify
 
 ---
-**Desenvolvido para Lizards Games**
-Data: Junho 2025
+**🎯 Backend limpo e otimizado para produção!**
+
